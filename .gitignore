@@ -4,3 +4,9 @@ dist/
 .DS_Store
 .tsbuildinfo
 coverage/
+
+# Internal planning notes — not for public repo
+benchmark.md
+NOTES.md
+TODO.md
+.private/
