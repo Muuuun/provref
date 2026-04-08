@@ -1,0 +1,41 @@
+{
+  "name": "provref",
+  "version": "0.1.0",
+  "description": "Build-time validator for structured numerical references in LaTeX papers (built on jsonparse)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "provref": "./bin/provref.mjs"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "tex/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tsx --test test/*.test.ts",
+    "check": "tsc --noEmit",
+    "dev": "tsx src/cli.ts"
+  },
+  "keywords": [
+    "latex",
+    "reproducible-research",
+    "provenance",
+    "scientific-writing",
+    "jsonparse",
+    "lint"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.5.0"
+  }
+}

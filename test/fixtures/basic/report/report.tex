@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{provref}
+\provrefLoadRuns{../data/runs/all_results.json}
+\provrefLoadLit{../notes/literature_values.json}
+
+\begin{document}
+
+\section{Results}
+
+Our run yields a fidelity of \resultref{run_1.fidelity} with energy
+conservation reaching \resultref{run_1.dynamics.energy_conservation}\,\%.
+A second run improves this to \resultref{run_2.fidelity} (std
+\resultref{run_2.details.std}).
+
+\section{Comparison with Prior Work}
+
+The previously reported fidelity by Rydberg et al.\ is
+\litref{rydberg2024.fidelity} \cite{rydberg2024}, while Smith et al.\ measured
+a gate time of \litref{smith2023.gate_time_ns}\,ns \cite{smith2023}.
+
+% This is a comment with \resultref{should.be.ignored}
+
+\end{document}

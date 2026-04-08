@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{provref}
+\begin{document}
+
+% (1) missing run
+The accuracy is \resultref{run_99.acc}.
+
+% (2) typo in nested key — should suggest 'energy_conservation'
+Energy: \resultref{run_1.dynamics.energy_conservaton}.
+
+% (3) non-numeric leaf
+Label: \resultref{run_1.label}.
+
+% (4) missing literature bibkey — should suggest 'rydberg2024'
+Prior: \litref{rydberg2025.fidelity}.
+
+% (5) missing field within an existing bibkey
+Prior arxiv: \litref{rydberg2024.arxiv}.
+
+\end{document}

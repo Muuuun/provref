@@ -1,0 +1,12 @@
+{
+  "_meta": {
+    "produced_by": "data/scripts/sim_v2.py",
+    "ran_at": "2026-04-08T13:00:00Z"
+  },
+  "fidelity": 0.891,
+  "loss": 0.097,
+  "details": {
+    "std": 0.005,
+    "samples": [0.89, 0.892, 0.891]
+  }
+}

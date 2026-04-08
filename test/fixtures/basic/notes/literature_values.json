@@ -1,0 +1,16 @@
+{
+  "rydberg2024": {
+    "source": "Rydberg et al., PRL 132, 020401 (2024)",
+    "arxiv": "2401.12345",
+    "context": "Single-qubit gate fidelity at T=100K, 6S->6P transition",
+    "fidelity": 0.953,
+    "fidelity_error": 0.012,
+    "decoherence_us": 50.0
+  },
+  "smith2023": {
+    "source": "Smith et al., Nature 613, 234 (2023)",
+    "doi": "10.1038/s41586-022-05456-9",
+    "context": "Two-qubit gate via dipolar interaction",
+    "gate_time_ns": 12.5
+  }
+}

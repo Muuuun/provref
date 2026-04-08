@@ -1,0 +1,8 @@
+{
+  "fidelity": 0.873,
+  "dynamics": {
+    "energy_conservation": 99.99,
+    "max_drift": 0.012
+  },
+  "label": "string-not-number"
+}

@@ -1,0 +1,12 @@
+{
+  "_meta": {
+    "produced_by": "data/scripts/sim_v1.py",
+    "ran_at": "2026-04-08T12:00:00Z"
+  },
+  "fidelity": 0.873,
+  "loss": 0.123,
+  "dynamics": {
+    "energy_conservation": 99.99,
+    "max_drift": 0.012
+  }
+}

@@ -1,0 +1,32 @@
+% provref.sty — structured numerical references for LaTeX
+%
+% Provides \resultref{key} and \litref{key} macros that look up values
+% in two separate JSON namespaces using jsonparse.
+%
+% Usage:
+%   \usepackage{provref}
+%   \provrefLoadRuns{data/runs/all_results.json}
+%   \provrefLoadLit{notes/literature_values.json}
+%
+%   Energy conservation reaches \resultref{run_5.dynamics.energy_conservation}\%.
+%   Compare to \litref{rydberg2024.fidelity} from \cite{rydberg2024}.
+%
+% Build-time validation (recommended):
+%   provref check report.tex --runs data/runs/all_results.json --lit notes/literature_values.json
+%
+% Without the build-time validator, missing keys silently expand to empty
+% (this is jsonparse's default behavior). Always run `provref check` before
+% pdflatex to catch typos.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{provref}[2026/04/08 v0.1 Structured numerical references]
+
+\RequirePackage{jsonparse}
+
+\newcommand{\provrefLoadRuns}[1]{\JSONParseFromFile{\provrefRuns}{#1}}
+\newcommand{\provrefLoadLit}[1]{\JSONParseFromFile{\provrefLit}{#1}}
+
+\newcommand{\resultref}[1]{\JSONParseExpandableValue{\provrefRuns}{#1}}
+\newcommand{\litref}[1]{\JSONParseExpandableValue{\provrefLit}{#1}}
+
+\endinput
