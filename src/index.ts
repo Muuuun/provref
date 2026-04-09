@@ -14,7 +14,7 @@ export type { WalkResult, WalkSuccess, WalkFailure, WalkFailureReason } from "./
 export { suggest, levenshtein } from "./hints.js";
 export type { Suggestion } from "./hints.js";
 
-export { check, formatErrors } from "./checker.js";
+export { check, resolve, formatErrors } from "./checker.js";
 export type { CheckResult, CheckError, CheckErrorKind, CheckOptions, ResolvedRef } from "./checker.js";
 
 export { mergeRuns, writeMerged } from "./merge.js";

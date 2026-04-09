@@ -7,6 +7,9 @@
  *       Validate all \resultref / \litref calls in <tex> against the JSON
  *       sources. Prints errors with hints, exits non-zero on failure.
  *
+ *   provref resolve <tex> --runs <runs.json> --lit <lit.json> -o <clean.tex>
+ *       Substitute all refs with literal values for review.
+ *
  *   provref merge <runs-dir> --output <path>
  *       Merge per-run results files into a single JSON file.
  *
@@ -15,8 +18,9 @@
  * Designed to be small enough to read in one screen.
  */
 
-import { readFileSync } from "node:fs";
-import { check, formatErrors } from "./checker.js";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
+import { check, resolve, formatErrors } from "./checker.js";
 import { mergeRuns, writeMerged } from "./merge.js";
 
 function getFlag(args: string[], name: string, fallback?: string): string | undefined {
@@ -117,6 +121,49 @@ async function cmdCheck(args: string[]): Promise<number> {
   return 0;
 }
 
+async function cmdResolve(args: string[]): Promise<number> {
+  const positional = getPositional(args, 1);
+  const texPath = positional[0];
+  if (!texPath) {
+    process.stderr.write("provref resolve: missing <tex> path\n");
+    return 2;
+  }
+  const runsPath = getFlag(args, "runs");
+  const litPath = getFlag(args, "lit");
+  const output = getFlag(args, "output") ?? getFlag(args, "o");
+  if (!runsPath || !litPath || !output) {
+    process.stderr.write("provref resolve: --runs, --lit, and -o/--output are required\n");
+    return 2;
+  }
+
+  let texContent: string;
+  try { texContent = readFileSync(texPath, "utf-8"); } catch (err) {
+    process.stderr.write(`provref resolve: cannot read '${texPath}': ${(err as Error).message}\n`);
+    return 2;
+  }
+  let runsJson: unknown;
+  try { runsJson = JSON.parse(readFileSync(runsPath, "utf-8")); } catch (err) {
+    process.stderr.write(`provref resolve: cannot load runs '${runsPath}': ${(err as Error).message}\n`);
+    return 2;
+  }
+  let litJson: unknown;
+  try { litJson = JSON.parse(readFileSync(litPath, "utf-8")); } catch (err) {
+    process.stderr.write(`provref resolve: cannot load lit '${litPath}': ${(err as Error).message}\n`);
+    return 2;
+  }
+
+  const result = resolve(texContent, runsJson, litJson);
+  if (result.errors.length > 0) {
+    process.stderr.write(formatErrors(result.errors) + "\n");
+    return 1;
+  }
+
+  mkdirSync(dirname(output), { recursive: true });
+  writeFileSync(output, result.resolved, "utf-8");
+  process.stdout.write(`provref resolve: wrote ${output}\n`);
+  return 0;
+}
+
 function cmdMerge(args: string[]): number {
   const positional = getPositional(args, 1);
   const runsDir = positional[0];
@@ -166,6 +213,8 @@ async function main(): Promise<number> {
   switch (cmd) {
     case "check":
       return await cmdCheck(args);
+    case "resolve":
+      return await cmdResolve(args);
     case "merge":
       return cmdMerge(args);
     default:

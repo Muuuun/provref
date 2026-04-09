@@ -177,6 +177,40 @@ export function check(
   return { resolved, errors };
 }
 
+/**
+ * Resolve all refs in texContent, producing a "clean" version with literal numbers.
+ * Runs check() first; if any errors, returns them without substitution.
+ */
+export function resolve(
+  texContent: string,
+  runsJson: unknown,
+  litJson: unknown,
+  options: CheckOptions = {},
+): { resolved: string; errors: CheckError[] } {
+  const result = check(texContent, runsJson, litJson, options);
+  if (result.errors.length > 0) {
+    return { resolved: texContent, errors: result.errors };
+  }
+
+  const REF_RE = /\\(resultref|litref)(\[[^\]]*\])?\{([^}]+)\}/g;
+  const resolved = texContent.replace(REF_RE, (match, kind: string, opts: string | undefined, key: string) => {
+    const root = kind === "resultref" ? runsJson : litJson;
+    const w = walk(root, key.trim());
+    if (!w.ok) return match;
+    return formatValue(w.value, opts);
+  });
+
+  return { resolved, errors: [] };
+}
+
+function formatValue(value: unknown, opts: string | undefined): string {
+  if (typeof value !== "number") return String(value);
+  if (!opts) return String(value);
+  const dpMatch = opts.match(/dp=(\d+)/);
+  if (dpMatch) return value.toFixed(parseInt(dpMatch[1]!, 10));
+  return String(value);
+}
+
 /** Format errors as a human-readable block. */
 export function formatErrors(errors: CheckError[]): string {
   if (errors.length === 0) return "";
